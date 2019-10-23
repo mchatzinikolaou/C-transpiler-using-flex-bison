@@ -1,0 +1,46 @@
+program useless;
+
+    type
+        string = array of char;
+
+    var i, k: integer;
+
+    procedure nl();
+    begin writeString('\n') end;
+
+    (* This is a rather silly function *)
+    procedure compute(n: integer; k:integer);
+        var j: integer;
+
+        function cube(i: integer): integer;
+
+        begin
+            result := i * i * i;
+            return
+        end;
+
+    begin
+        j := (100 - n) + cube(k);
+        writeString("Computed (100-n)+k^3 = "); 
+        writeInteger(j); nl()
+    end;
+
+    function promptForInteger(prompt: array of char) : integer;
+    begin
+        writeString(prompt);
+        result := 5;
+        writeString('You typed: ');
+        writeInteger(result); 
+        nl();
+        return
+    end;
+
+(* Here you can see some useless lines.
+** Just for testing the multi-line comments ...
+*)
+
+begin
+    k := promptForInteger('Type a number: ');
+    i := promptForInteger('Type another number: ');
+    compute(k,i) (* Here you can see some dummy comments! *)
+end.

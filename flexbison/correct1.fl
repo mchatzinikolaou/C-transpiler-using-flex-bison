@@ -1,0 +1,33 @@
+program fake;
+
+var x:real;
+
+function divide( divided : real ; divisor : real) : real ;
+begin
+	result:=divided/divisor;
+	return
+end;
+
+function isAPowerOfTwo(candidate_number: integer): boolean;
+begin
+	while x>1 do
+	begin
+		x:=x-divide(x,2);
+		writeReal(x);
+		writeString("\n")
+	end;
+	result:=(x=1)
+end;
+
+begin
+	x:=1;
+	if isAPowerOfTwo(x) then
+	begin
+		writeReal(x);
+		writeString(" is a power of 2!\n")
+	end
+	else begin
+		writeString("x is not a power of 2!\n");
+		writeReal(x)
+	end
+end.

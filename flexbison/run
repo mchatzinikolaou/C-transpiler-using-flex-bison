@@ -1,0 +1,20 @@
+make clean
+make
+
+./mycompiler <correct1.fl >correct1.c
+gcc -o correct1 correct1.c
+./correct1
+
+
+./mycompiler <correct2.fl >correct2.c
+gcc -o correct2 correct2.c
+./correct2
+
+
+./mycompiler <wrong1.fl >wrong1.c
+gcc -o wrong1 wrong1.c
+./wrong1
+
+./mycompiler <wrong2.fl >wrong2.c
+gcc -o wrong2 wrong2.c
+./wrong2

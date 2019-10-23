@@ -1,0 +1,2667 @@
+Terminals unused in grammar
+
+   KW_GOTO
+
+
+Grammar
+
+    0 $accept: program $end
+
+    1 program: program_decl optional_prologue body '.'
+
+    2 optional_prologue: %empty
+    3                  | variable_declarations optional_prologue
+    4                  | function_declarations optional_prologue
+    5                  | proceedure_declarations optional_prologue
+    6                  | typedefs optional_prologue
+
+    7 proceedure_declarations: proceedure_declaration
+    8                        | proceedure_declarations ';' proceedure_declaration
+
+    9 function_declarations: function_declaration
+   10                      | function_declarations ';' function_declaration
+
+   11 proceedure_declaration: KW_PROC IDENT '(' routine_args ')' ';' optional_prologue body ';'
+
+   12 function_declaration: KW_FUNC IDENT '(' routine_args ')' ':' array simple_var_type ';' optional_prologue function_body ';'
+   13                     | KW_FUNC IDENT '(' routine_args ')' ':' pointer simple_var_type ';' optional_prologue function_body ';'
+   14                     | KW_FUNC IDENT '(' routine_args ')' ':' simple_var_type ';' optional_prologue function_body ';'
+
+   15 routine_args: %empty
+   16             | argument_list
+
+   17 argument_list: func_arg
+   18              | argument_list ';' func_arg
+
+   19 func_arg: identifiers ':' array simple_var_type
+   20         | identifiers ':' pointer simple_var_type
+   21         | identifiers ':' simple_var_type
+
+   22 variable_declarations: KW_VAR variable_list ';'
+
+   23 variable_list: variable
+   24              | variable_list ';' variable
+
+   25 variable: identifiers ':' array simple_var_type
+   26         | identifiers ':' pointer simple_var_type
+   27         | identifiers ':' simple_var_type
+
+   28 identifiers: IDENT
+   29            | identifiers ',' IDENT
+
+   30 array: KW_ARRAY dimensions KW_OF
+
+   31 pointer: KW_ARRAY KW_OF
+
+   32 dimensions: dimension
+   33           | dimensions dimension
+
+   34 array_call: IDENT dimensions
+
+   35 function_body: KW_BEGIN statements KW_END
+
+   36 body: KW_BEGIN statements KW_END
+
+   37 statements: %empty
+   38           | statement_list
+
+   39 statement_list: statement
+   40               | statement_list ';' statement
+
+   41 statement: proc_call
+   42          | store
+   43          | control_statements
+   44          | KW_RETURN
+
+   45 typedefs: KW_TYPE definitions ';'
+
+   46 definitions: definition
+   47            | definitions ';' definition
+
+   48 definition: IDENT TK_EQUAL array simple_var_type
+   49           | IDENT TK_EQUAL pointer simple_var_type
+   50           | IDENT TK_EQUAL simple_var_type
+
+   51 store: IDENT STORE expression
+   52      | KW_RESULT STORE expression
+   53      | array_call STORE expression
+
+   54 proc_call: IDENT '(' arguments ')'
+
+   55 arguments: %empty
+   56          | arglist
+
+   57 arglist: expression
+   58        | arglist ',' expression
+
+   59 dimension: '[' POSINT ']'
+
+   60 program_decl: KW_PROGRAM IDENT ';'
+
+   61 control_statements: if_statements
+   62                   | for_statements
+   63                   | while_statements
+
+   64 if_statements: KW_IF expression KW_THEN control_body
+   65              | KW_IF expression KW_THEN control_body KW_ELSE control_body
+
+   66 for_statements: KW_FOR IDENT STORE expression KW_TO expression KW_DO control_body
+   67               | KW_FOR IDENT STORE expression KW_DOWNTO expression KW_DO control_body
+
+   68 while_statements: KW_WHILE expression KW_DO control_body
+   69                 | KW_REPEAT control_body KW_UNTIL expression
+
+   70 control_body: KW_BEGIN statements KW_END
+
+   71 expression: single_argument
+   72           | expression TK_MULTIPLY expression
+   73           | expression KW_DIV expression
+   74           | expression TK_SIGN expression
+   75           | expression KW_MOD expression
+   76           | expression TK_EQUAL expression
+   77           | expression RELATIONAL expression
+   78           | expression KW_AND expression
+   79           | expression KW_OR expression
+   80           | '(' expression ')'
+
+   81 single_argument: POSINT
+   82                | REAL
+   83                | IDENT
+   84                | KW_NOT IDENT
+   85                | TK_SIGN IDENT
+   86                | proc_call
+   87                | BOOL
+   88                | STRING
+   89                | array_call
+   90                | KW_RESULT
+
+   91 simple_var_type: KW_INTEGER
+   92                | KW_BOOLEAN
+   93                | KW_REAL
+   94                | KW_CHAR
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40) 11 12 13 14 54 80
+')' (41) 11 12 13 14 54 80
+',' (44) 29 58
+'.' (46) 1
+':' (58) 12 13 14 19 20 21 25 26 27
+';' (59) 8 10 11 12 13 14 18 22 24 40 45 47 60
+'[' (91) 59
+']' (93) 59
+error (256)
+IDENT (258) 11 12 13 14 28 29 34 48 49 50 51 54 60 66 67 83 84 85
+POSINT (259) 59 81
+REAL (260) 82
+STRING (261) 88
+BOOL (262) 87
+RELATIONAL (263) 77
+KW_AND (264) 78
+KW_DIV (265) 73
+KW_MOD (266) 75
+KW_OR (267) 79
+TK_EQUAL (268) 48 49 50 76
+TK_MULTIPLY (269) 72
+KW_NOT (270) 84
+TK_SIGN (271) 74 85
+STORE (272) 51 52 53 66 67
+KW_TYPE (273) 45
+KW_PROGRAM (274) 60
+KW_BEGIN (275) 35 36 70
+KW_END (276) 35 36 70
+KW_FUNC (277) 12 13 14
+KW_PROC (278) 11
+KW_RESULT (279) 52 90
+KW_ARRAY (280) 30 31
+KW_DO (281) 66 67 68
+KW_GOTO (282)
+KW_RETURN (283) 44
+KW_BOOLEAN (284) 92
+KW_ELSE (285) 65
+KW_IF (286) 64 65
+KW_OF (287) 30 31
+KW_REAL (288) 93
+KW_THEN (289) 64 65
+KW_CHAR (290) 94
+KW_FOR (291) 66 67
+KW_INTEGER (292) 91
+KW_REPEAT (293) 69
+KW_UNTIL (294) 69
+KW_VAR (295) 22
+KW_WHILE (296) 68
+KW_TO (297) 66
+KW_DOWNTO (298) 67
+
+
+Nonterminals, with rules where they appear
+
+$accept (52)
+    on left: 0
+program (53)
+    on left: 1, on right: 0
+optional_prologue (54)
+    on left: 2 3 4 5 6, on right: 1 3 4 5 6 11 12 13 14
+proceedure_declarations (55)
+    on left: 7 8, on right: 5 8
+function_declarations (56)
+    on left: 9 10, on right: 4 10
+proceedure_declaration (57)
+    on left: 11, on right: 7 8
+function_declaration (58)
+    on left: 12 13 14, on right: 9 10
+routine_args (59)
+    on left: 15 16, on right: 11 12 13 14
+argument_list (60)
+    on left: 17 18, on right: 16 18
+func_arg (61)
+    on left: 19 20 21, on right: 17 18
+variable_declarations (62)
+    on left: 22, on right: 3
+variable_list (63)
+    on left: 23 24, on right: 22 24
+variable (64)
+    on left: 25 26 27, on right: 23 24
+identifiers (65)
+    on left: 28 29, on right: 19 20 21 25 26 27 29
+array (66)
+    on left: 30, on right: 12 19 25 48
+pointer (67)
+    on left: 31, on right: 13 20 26 49
+dimensions (68)
+    on left: 32 33, on right: 30 33 34
+array_call (69)
+    on left: 34, on right: 53 89
+function_body (70)
+    on left: 35, on right: 12 13 14
+body (71)
+    on left: 36, on right: 1 11
+statements (72)
+    on left: 37 38, on right: 35 36 70
+statement_list (73)
+    on left: 39 40, on right: 38 40
+statement (74)
+    on left: 41 42 43 44, on right: 39 40
+typedefs (75)
+    on left: 45, on right: 6
+definitions (76)
+    on left: 46 47, on right: 45 47
+definition (77)
+    on left: 48 49 50, on right: 46 47
+store (78)
+    on left: 51 52 53, on right: 42
+proc_call (79)
+    on left: 54, on right: 41 86
+arguments (80)
+    on left: 55 56, on right: 54
+arglist (81)
+    on left: 57 58, on right: 56 58
+dimension (82)
+    on left: 59, on right: 32 33
+program_decl (83)
+    on left: 60, on right: 1
+control_statements (84)
+    on left: 61 62 63, on right: 43
+if_statements (85)
+    on left: 64 65, on right: 61
+for_statements (86)
+    on left: 66 67, on right: 62
+while_statements (87)
+    on left: 68 69, on right: 63
+control_body (88)
+    on left: 70, on right: 64 65 66 67 68 69
+expression (89)
+    on left: 71 72 73 74 75 76 77 78 79 80, on right: 51 52 53 57 58
+    64 65 66 67 68 69 72 73 74 75 76 77 78 79 80
+single_argument (90)
+    on left: 81 82 83 84 85 86 87 88 89 90, on right: 71
+simple_var_type (91)
+    on left: 91 92 93 94, on right: 12 13 14 19 20 21 25 26 27 48 49
+    50
+
+
+State 0
+
+    0 $accept: . program $end
+
+    KW_PROGRAM  shift, and go to state 1
+
+    program       go to state 2
+    program_decl  go to state 3
+
+
+State 1
+
+   60 program_decl: KW_PROGRAM . IDENT ';'
+
+    IDENT  shift, and go to state 4
+
+
+State 2
+
+    0 $accept: program . $end
+
+    $end  shift, and go to state 5
+
+
+State 3
+
+    1 program: program_decl . optional_prologue body '.'
+
+    KW_TYPE  shift, and go to state 6
+    KW_FUNC  shift, and go to state 7
+    KW_PROC  shift, and go to state 8
+    KW_VAR   shift, and go to state 9
+
+    $default  reduce using rule 2 (optional_prologue)
+
+    optional_prologue        go to state 10
+    proceedure_declarations  go to state 11
+    function_declarations    go to state 12
+    proceedure_declaration   go to state 13
+    function_declaration     go to state 14
+    variable_declarations    go to state 15
+    typedefs                 go to state 16
+
+
+State 4
+
+   60 program_decl: KW_PROGRAM IDENT . ';'
+
+    ';'  shift, and go to state 17
+
+
+State 5
+
+    0 $accept: program $end .
+
+    $default  accept
+
+
+State 6
+
+   45 typedefs: KW_TYPE . definitions ';'
+
+    IDENT  shift, and go to state 18
+
+    definitions  go to state 19
+    definition   go to state 20
+
+
+State 7
+
+   12 function_declaration: KW_FUNC . IDENT '(' routine_args ')' ':' array simple_var_type ';' optional_prologue function_body ';'
+   13                     | KW_FUNC . IDENT '(' routine_args ')' ':' pointer simple_var_type ';' optional_prologue function_body ';'
+   14                     | KW_FUNC . IDENT '(' routine_args ')' ':' simple_var_type ';' optional_prologue function_body ';'
+
+    IDENT  shift, and go to state 21
+
+
+State 8
+
+   11 proceedure_declaration: KW_PROC . IDENT '(' routine_args ')' ';' optional_prologue body ';'
+
+    IDENT  shift, and go to state 22
+
+
+State 9
+
+   22 variable_declarations: KW_VAR . variable_list ';'
+
+    IDENT  shift, and go to state 23
+
+    variable_list  go to state 24
+    variable       go to state 25
+    identifiers    go to state 26
+
+
+State 10
+
+    1 program: program_decl optional_prologue . body '.'
+
+    KW_BEGIN  shift, and go to state 27
+
+    body  go to state 28
+
+
+State 11
+
+    5 optional_prologue: proceedure_declarations . optional_prologue
+    8 proceedure_declarations: proceedure_declarations . ';' proceedure_declaration
+
+    KW_TYPE  shift, and go to state 6
+    KW_FUNC  shift, and go to state 7
+    KW_PROC  shift, and go to state 8
+    KW_VAR   shift, and go to state 9
+    ';'      shift, and go to state 29
+
+    $default  reduce using rule 2 (optional_prologue)
+
+    optional_prologue        go to state 30
+    proceedure_declarations  go to state 11
+    function_declarations    go to state 12
+    proceedure_declaration   go to state 13
+    function_declaration     go to state 14
+    variable_declarations    go to state 15
+    typedefs                 go to state 16
+
+
+State 12
+
+    4 optional_prologue: function_declarations . optional_prologue
+   10 function_declarations: function_declarations . ';' function_declaration
+
+    KW_TYPE  shift, and go to state 6
+    KW_FUNC  shift, and go to state 7
+    KW_PROC  shift, and go to state 8
+    KW_VAR   shift, and go to state 9
+    ';'      shift, and go to state 31
+
+    $default  reduce using rule 2 (optional_prologue)
+
+    optional_prologue        go to state 32
+    proceedure_declarations  go to state 11
+    function_declarations    go to state 12
+    proceedure_declaration   go to state 13
+    function_declaration     go to state 14
+    variable_declarations    go to state 15
+    typedefs                 go to state 16
+
+
+State 13
+
+    7 proceedure_declarations: proceedure_declaration .
+
+    $default  reduce using rule 7 (proceedure_declarations)
+
+
+State 14
+
+    9 function_declarations: function_declaration .
+
+    $default  reduce using rule 9 (function_declarations)
+
+
+State 15
+
+    3 optional_prologue: variable_declarations . optional_prologue
+
+    KW_TYPE  shift, and go to state 6
+    KW_FUNC  shift, and go to state 7
+    KW_PROC  shift, and go to state 8
+    KW_VAR   shift, and go to state 9
+
+    $default  reduce using rule 2 (optional_prologue)
+
+    optional_prologue        go to state 33
+    proceedure_declarations  go to state 11
+    function_declarations    go to state 12
+    proceedure_declaration   go to state 13
+    function_declaration     go to state 14
+    variable_declarations    go to state 15
+    typedefs                 go to state 16
+
+
+State 16
+
+    6 optional_prologue: typedefs . optional_prologue
+
+    KW_TYPE  shift, and go to state 6
+    KW_FUNC  shift, and go to state 7
+    KW_PROC  shift, and go to state 8
+    KW_VAR   shift, and go to state 9
+
+    $default  reduce using rule 2 (optional_prologue)
+
+    optional_prologue        go to state 34
+    proceedure_declarations  go to state 11
+    function_declarations    go to state 12
+    proceedure_declaration   go to state 13
+    function_declaration     go to state 14
+    variable_declarations    go to state 15
+    typedefs                 go to state 16
+
+
+State 17
+
+   60 program_decl: KW_PROGRAM IDENT ';' .
+
+    $default  reduce using rule 60 (program_decl)
+
+
+State 18
+
+   48 definition: IDENT . TK_EQUAL array simple_var_type
+   49           | IDENT . TK_EQUAL pointer simple_var_type
+   50           | IDENT . TK_EQUAL simple_var_type
+
+    TK_EQUAL  shift, and go to state 35
+
+
+State 19
+
+   45 typedefs: KW_TYPE definitions . ';'
+   47 definitions: definitions . ';' definition
+
+    ';'  shift, and go to state 36
+
+
+State 20
+
+   46 definitions: definition .
+
+    $default  reduce using rule 46 (definitions)
+
+
+State 21
+
+   12 function_declaration: KW_FUNC IDENT . '(' routine_args ')' ':' array simple_var_type ';' optional_prologue function_body ';'
+   13                     | KW_FUNC IDENT . '(' routine_args ')' ':' pointer simple_var_type ';' optional_prologue function_body ';'
+   14                     | KW_FUNC IDENT . '(' routine_args ')' ':' simple_var_type ';' optional_prologue function_body ';'
+
+    '('  shift, and go to state 37
+
+
+State 22
+
+   11 proceedure_declaration: KW_PROC IDENT . '(' routine_args ')' ';' optional_prologue body ';'
+
+    '('  shift, and go to state 38
+
+
+State 23
+
+   28 identifiers: IDENT .
+
+    $default  reduce using rule 28 (identifiers)
+
+
+State 24
+
+   22 variable_declarations: KW_VAR variable_list . ';'
+   24 variable_list: variable_list . ';' variable
+
+    ';'  shift, and go to state 39
+
+
+State 25
+
+   23 variable_list: variable .
+
+    $default  reduce using rule 23 (variable_list)
+
+
+State 26
+
+   25 variable: identifiers . ':' array simple_var_type
+   26         | identifiers . ':' pointer simple_var_type
+   27         | identifiers . ':' simple_var_type
+   29 identifiers: identifiers . ',' IDENT
+
+    ':'  shift, and go to state 40
+    ','  shift, and go to state 41
+
+
+State 27
+
+   36 body: KW_BEGIN . statements KW_END
+
+    IDENT      shift, and go to state 42
+    KW_RESULT  shift, and go to state 43
+    KW_RETURN  shift, and go to state 44
+    KW_IF      shift, and go to state 45
+    KW_FOR     shift, and go to state 46
+    KW_REPEAT  shift, and go to state 47
+    KW_WHILE   shift, and go to state 48
+
+    $default  reduce using rule 37 (statements)
+
+    array_call          go to state 49
+    statements          go to state 50
+    statement_list      go to state 51
+    statement           go to state 52
+    store               go to state 53
+    proc_call           go to state 54
+    control_statements  go to state 55
+    if_statements       go to state 56
+    for_statements      go to state 57
+    while_statements    go to state 58
+
+
+State 28
+
+    1 program: program_decl optional_prologue body . '.'
+
+    '.'  shift, and go to state 59
+
+
+State 29
+
+    8 proceedure_declarations: proceedure_declarations ';' . proceedure_declaration
+
+    KW_PROC  shift, and go to state 8
+
+    proceedure_declaration  go to state 60
+
+
+State 30
+
+    5 optional_prologue: proceedure_declarations optional_prologue .
+
+    $default  reduce using rule 5 (optional_prologue)
+
+
+State 31
+
+   10 function_declarations: function_declarations ';' . function_declaration
+
+    KW_FUNC  shift, and go to state 7
+
+    function_declaration  go to state 61
+
+
+State 32
+
+    4 optional_prologue: function_declarations optional_prologue .
+
+    $default  reduce using rule 4 (optional_prologue)
+
+
+State 33
+
+    3 optional_prologue: variable_declarations optional_prologue .
+
+    $default  reduce using rule 3 (optional_prologue)
+
+
+State 34
+
+    6 optional_prologue: typedefs optional_prologue .
+
+    $default  reduce using rule 6 (optional_prologue)
+
+
+State 35
+
+   48 definition: IDENT TK_EQUAL . array simple_var_type
+   49           | IDENT TK_EQUAL . pointer simple_var_type
+   50           | IDENT TK_EQUAL . simple_var_type
+
+    KW_ARRAY    shift, and go to state 62
+    KW_BOOLEAN  shift, and go to state 63
+    KW_REAL     shift, and go to state 64
+    KW_CHAR     shift, and go to state 65
+    KW_INTEGER  shift, and go to state 66
+
+    array            go to state 67
+    pointer          go to state 68
+    simple_var_type  go to state 69
+
+
+State 36
+
+   45 typedefs: KW_TYPE definitions ';' .
+   47 definitions: definitions ';' . definition
+
+    IDENT  shift, and go to state 18
+
+    $default  reduce using rule 45 (typedefs)
+
+    definition  go to state 70
+
+
+State 37
+
+   12 function_declaration: KW_FUNC IDENT '(' . routine_args ')' ':' array simple_var_type ';' optional_prologue function_body ';'
+   13                     | KW_FUNC IDENT '(' . routine_args ')' ':' pointer simple_var_type ';' optional_prologue function_body ';'
+   14                     | KW_FUNC IDENT '(' . routine_args ')' ':' simple_var_type ';' optional_prologue function_body ';'
+
+    IDENT  shift, and go to state 23
+
+    $default  reduce using rule 15 (routine_args)
+
+    routine_args   go to state 71
+    argument_list  go to state 72
+    func_arg       go to state 73
+    identifiers    go to state 74
+
+
+State 38
+
+   11 proceedure_declaration: KW_PROC IDENT '(' . routine_args ')' ';' optional_prologue body ';'
+
+    IDENT  shift, and go to state 23
+
+    $default  reduce using rule 15 (routine_args)
+
+    routine_args   go to state 75
+    argument_list  go to state 72
+    func_arg       go to state 73
+    identifiers    go to state 74
+
+
+State 39
+
+   22 variable_declarations: KW_VAR variable_list ';' .
+   24 variable_list: variable_list ';' . variable
+
+    IDENT  shift, and go to state 23
+
+    $default  reduce using rule 22 (variable_declarations)
+
+    variable     go to state 76
+    identifiers  go to state 26
+
+
+State 40
+
+   25 variable: identifiers ':' . array simple_var_type
+   26         | identifiers ':' . pointer simple_var_type
+   27         | identifiers ':' . simple_var_type
+
+    KW_ARRAY    shift, and go to state 62
+    KW_BOOLEAN  shift, and go to state 63
+    KW_REAL     shift, and go to state 64
+    KW_CHAR     shift, and go to state 65
+    KW_INTEGER  shift, and go to state 66
+
+    array            go to state 77
+    pointer          go to state 78
+    simple_var_type  go to state 79
+
+
+State 41
+
+   29 identifiers: identifiers ',' . IDENT
+
+    IDENT  shift, and go to state 80
+
+
+State 42
+
+   34 array_call: IDENT . dimensions
+   51 store: IDENT . STORE expression
+   54 proc_call: IDENT . '(' arguments ')'
+
+    STORE  shift, and go to state 81
+    '('    shift, and go to state 82
+    '['    shift, and go to state 83
+
+    dimensions  go to state 84
+    dimension   go to state 85
+
+
+State 43
+
+   52 store: KW_RESULT . STORE expression
+
+    STORE  shift, and go to state 86
+
+
+State 44
+
+   44 statement: KW_RETURN .
+
+    $default  reduce using rule 44 (statement)
+
+
+State 45
+
+   64 if_statements: KW_IF . expression KW_THEN control_body
+   65              | KW_IF . expression KW_THEN control_body KW_ELSE control_body
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    expression       go to state 98
+    single_argument  go to state 99
+
+
+State 46
+
+   66 for_statements: KW_FOR . IDENT STORE expression KW_TO expression KW_DO control_body
+   67               | KW_FOR . IDENT STORE expression KW_DOWNTO expression KW_DO control_body
+
+    IDENT  shift, and go to state 100
+
+
+State 47
+
+   69 while_statements: KW_REPEAT . control_body KW_UNTIL expression
+
+    KW_BEGIN  shift, and go to state 101
+
+    control_body  go to state 102
+
+
+State 48
+
+   68 while_statements: KW_WHILE . expression KW_DO control_body
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    expression       go to state 103
+    single_argument  go to state 99
+
+
+State 49
+
+   53 store: array_call . STORE expression
+
+    STORE  shift, and go to state 104
+
+
+State 50
+
+   36 body: KW_BEGIN statements . KW_END
+
+    KW_END  shift, and go to state 105
+
+
+State 51
+
+   38 statements: statement_list .
+   40 statement_list: statement_list . ';' statement
+
+    ';'  shift, and go to state 106
+
+    $default  reduce using rule 38 (statements)
+
+
+State 52
+
+   39 statement_list: statement .
+
+    $default  reduce using rule 39 (statement_list)
+
+
+State 53
+
+   42 statement: store .
+
+    $default  reduce using rule 42 (statement)
+
+
+State 54
+
+   41 statement: proc_call .
+
+    $default  reduce using rule 41 (statement)
+
+
+State 55
+
+   43 statement: control_statements .
+
+    $default  reduce using rule 43 (statement)
+
+
+State 56
+
+   61 control_statements: if_statements .
+
+    $default  reduce using rule 61 (control_statements)
+
+
+State 57
+
+   62 control_statements: for_statements .
+
+    $default  reduce using rule 62 (control_statements)
+
+
+State 58
+
+   63 control_statements: while_statements .
+
+    $default  reduce using rule 63 (control_statements)
+
+
+State 59
+
+    1 program: program_decl optional_prologue body '.' .
+
+    $default  reduce using rule 1 (program)
+
+
+State 60
+
+    8 proceedure_declarations: proceedure_declarations ';' proceedure_declaration .
+
+    $default  reduce using rule 8 (proceedure_declarations)
+
+
+State 61
+
+   10 function_declarations: function_declarations ';' function_declaration .
+
+    $default  reduce using rule 10 (function_declarations)
+
+
+State 62
+
+   30 array: KW_ARRAY . dimensions KW_OF
+   31 pointer: KW_ARRAY . KW_OF
+
+    KW_OF  shift, and go to state 107
+    '['    shift, and go to state 83
+
+    dimensions  go to state 108
+    dimension   go to state 85
+
+
+State 63
+
+   92 simple_var_type: KW_BOOLEAN .
+
+    $default  reduce using rule 92 (simple_var_type)
+
+
+State 64
+
+   93 simple_var_type: KW_REAL .
+
+    $default  reduce using rule 93 (simple_var_type)
+
+
+State 65
+
+   94 simple_var_type: KW_CHAR .
+
+    $default  reduce using rule 94 (simple_var_type)
+
+
+State 66
+
+   91 simple_var_type: KW_INTEGER .
+
+    $default  reduce using rule 91 (simple_var_type)
+
+
+State 67
+
+   48 definition: IDENT TK_EQUAL array . simple_var_type
+
+    KW_BOOLEAN  shift, and go to state 63
+    KW_REAL     shift, and go to state 64
+    KW_CHAR     shift, and go to state 65
+    KW_INTEGER  shift, and go to state 66
+
+    simple_var_type  go to state 109
+
+
+State 68
+
+   49 definition: IDENT TK_EQUAL pointer . simple_var_type
+
+    KW_BOOLEAN  shift, and go to state 63
+    KW_REAL     shift, and go to state 64
+    KW_CHAR     shift, and go to state 65
+    KW_INTEGER  shift, and go to state 66
+
+    simple_var_type  go to state 110
+
+
+State 69
+
+   50 definition: IDENT TK_EQUAL simple_var_type .
+
+    $default  reduce using rule 50 (definition)
+
+
+State 70
+
+   47 definitions: definitions ';' definition .
+
+    $default  reduce using rule 47 (definitions)
+
+
+State 71
+
+   12 function_declaration: KW_FUNC IDENT '(' routine_args . ')' ':' array simple_var_type ';' optional_prologue function_body ';'
+   13                     | KW_FUNC IDENT '(' routine_args . ')' ':' pointer simple_var_type ';' optional_prologue function_body ';'
+   14                     | KW_FUNC IDENT '(' routine_args . ')' ':' simple_var_type ';' optional_prologue function_body ';'
+
+    ')'  shift, and go to state 111
+
+
+State 72
+
+   16 routine_args: argument_list .
+   18 argument_list: argument_list . ';' func_arg
+
+    ';'  shift, and go to state 112
+
+    $default  reduce using rule 16 (routine_args)
+
+
+State 73
+
+   17 argument_list: func_arg .
+
+    $default  reduce using rule 17 (argument_list)
+
+
+State 74
+
+   19 func_arg: identifiers . ':' array simple_var_type
+   20         | identifiers . ':' pointer simple_var_type
+   21         | identifiers . ':' simple_var_type
+   29 identifiers: identifiers . ',' IDENT
+
+    ':'  shift, and go to state 113
+    ','  shift, and go to state 41
+
+
+State 75
+
+   11 proceedure_declaration: KW_PROC IDENT '(' routine_args . ')' ';' optional_prologue body ';'
+
+    ')'  shift, and go to state 114
+
+
+State 76
+
+   24 variable_list: variable_list ';' variable .
+
+    $default  reduce using rule 24 (variable_list)
+
+
+State 77
+
+   25 variable: identifiers ':' array . simple_var_type
+
+    KW_BOOLEAN  shift, and go to state 63
+    KW_REAL     shift, and go to state 64
+    KW_CHAR     shift, and go to state 65
+    KW_INTEGER  shift, and go to state 66
+
+    simple_var_type  go to state 115
+
+
+State 78
+
+   26 variable: identifiers ':' pointer . simple_var_type
+
+    KW_BOOLEAN  shift, and go to state 63
+    KW_REAL     shift, and go to state 64
+    KW_CHAR     shift, and go to state 65
+    KW_INTEGER  shift, and go to state 66
+
+    simple_var_type  go to state 116
+
+
+State 79
+
+   27 variable: identifiers ':' simple_var_type .
+
+    $default  reduce using rule 27 (variable)
+
+
+State 80
+
+   29 identifiers: identifiers ',' IDENT .
+
+    $default  reduce using rule 29 (identifiers)
+
+
+State 81
+
+   51 store: IDENT STORE . expression
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    expression       go to state 117
+    single_argument  go to state 99
+
+
+State 82
+
+   54 proc_call: IDENT '(' . arguments ')'
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    $default  reduce using rule 55 (arguments)
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    arguments        go to state 118
+    arglist          go to state 119
+    expression       go to state 120
+    single_argument  go to state 99
+
+
+State 83
+
+   59 dimension: '[' . POSINT ']'
+
+    POSINT  shift, and go to state 121
+
+
+State 84
+
+   33 dimensions: dimensions . dimension
+   34 array_call: IDENT dimensions .
+
+    '['  shift, and go to state 83
+
+    $default  reduce using rule 34 (array_call)
+
+    dimension  go to state 122
+
+
+State 85
+
+   32 dimensions: dimension .
+
+    $default  reduce using rule 32 (dimensions)
+
+
+State 86
+
+   52 store: KW_RESULT STORE . expression
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    expression       go to state 123
+    single_argument  go to state 99
+
+
+State 87
+
+   34 array_call: IDENT . dimensions
+   54 proc_call: IDENT . '(' arguments ')'
+   83 single_argument: IDENT .
+
+    '('  shift, and go to state 82
+    '['  shift, and go to state 83
+
+    $default  reduce using rule 83 (single_argument)
+
+    dimensions  go to state 84
+    dimension   go to state 85
+
+
+State 88
+
+   81 single_argument: POSINT .
+
+    $default  reduce using rule 81 (single_argument)
+
+
+State 89
+
+   82 single_argument: REAL .
+
+    $default  reduce using rule 82 (single_argument)
+
+
+State 90
+
+   88 single_argument: STRING .
+
+    $default  reduce using rule 88 (single_argument)
+
+
+State 91
+
+   87 single_argument: BOOL .
+
+    $default  reduce using rule 87 (single_argument)
+
+
+State 92
+
+   84 single_argument: KW_NOT . IDENT
+
+    IDENT  shift, and go to state 124
+
+
+State 93
+
+   85 single_argument: TK_SIGN . IDENT
+
+    IDENT  shift, and go to state 125
+
+
+State 94
+
+   90 single_argument: KW_RESULT .
+
+    $default  reduce using rule 90 (single_argument)
+
+
+State 95
+
+   80 expression: '(' . expression ')'
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    expression       go to state 126
+    single_argument  go to state 99
+
+
+State 96
+
+   89 single_argument: array_call .
+
+    $default  reduce using rule 89 (single_argument)
+
+
+State 97
+
+   86 single_argument: proc_call .
+
+    $default  reduce using rule 86 (single_argument)
+
+
+State 98
+
+   64 if_statements: KW_IF expression . KW_THEN control_body
+   65              | KW_IF expression . KW_THEN control_body KW_ELSE control_body
+   72 expression: expression . TK_MULTIPLY expression
+   73           | expression . KW_DIV expression
+   74           | expression . TK_SIGN expression
+   75           | expression . KW_MOD expression
+   76           | expression . TK_EQUAL expression
+   77           | expression . RELATIONAL expression
+   78           | expression . KW_AND expression
+   79           | expression . KW_OR expression
+
+    RELATIONAL   shift, and go to state 127
+    KW_AND       shift, and go to state 128
+    KW_DIV       shift, and go to state 129
+    KW_MOD       shift, and go to state 130
+    KW_OR        shift, and go to state 131
+    TK_EQUAL     shift, and go to state 132
+    TK_MULTIPLY  shift, and go to state 133
+    TK_SIGN      shift, and go to state 134
+    KW_THEN      shift, and go to state 135
+
+
+State 99
+
+   71 expression: single_argument .
+
+    $default  reduce using rule 71 (expression)
+
+
+State 100
+
+   66 for_statements: KW_FOR IDENT . STORE expression KW_TO expression KW_DO control_body
+   67               | KW_FOR IDENT . STORE expression KW_DOWNTO expression KW_DO control_body
+
+    STORE  shift, and go to state 136
+
+
+State 101
+
+   70 control_body: KW_BEGIN . statements KW_END
+
+    IDENT      shift, and go to state 42
+    KW_RESULT  shift, and go to state 43
+    KW_RETURN  shift, and go to state 44
+    KW_IF      shift, and go to state 45
+    KW_FOR     shift, and go to state 46
+    KW_REPEAT  shift, and go to state 47
+    KW_WHILE   shift, and go to state 48
+
+    $default  reduce using rule 37 (statements)
+
+    array_call          go to state 49
+    statements          go to state 137
+    statement_list      go to state 51
+    statement           go to state 52
+    store               go to state 53
+    proc_call           go to state 54
+    control_statements  go to state 55
+    if_statements       go to state 56
+    for_statements      go to state 57
+    while_statements    go to state 58
+
+
+State 102
+
+   69 while_statements: KW_REPEAT control_body . KW_UNTIL expression
+
+    KW_UNTIL  shift, and go to state 138
+
+
+State 103
+
+   68 while_statements: KW_WHILE expression . KW_DO control_body
+   72 expression: expression . TK_MULTIPLY expression
+   73           | expression . KW_DIV expression
+   74           | expression . TK_SIGN expression
+   75           | expression . KW_MOD expression
+   76           | expression . TK_EQUAL expression
+   77           | expression . RELATIONAL expression
+   78           | expression . KW_AND expression
+   79           | expression . KW_OR expression
+
+    RELATIONAL   shift, and go to state 127
+    KW_AND       shift, and go to state 128
+    KW_DIV       shift, and go to state 129
+    KW_MOD       shift, and go to state 130
+    KW_OR        shift, and go to state 131
+    TK_EQUAL     shift, and go to state 132
+    TK_MULTIPLY  shift, and go to state 133
+    TK_SIGN      shift, and go to state 134
+    KW_DO        shift, and go to state 139
+
+
+State 104
+
+   53 store: array_call STORE . expression
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    expression       go to state 140
+    single_argument  go to state 99
+
+
+State 105
+
+   36 body: KW_BEGIN statements KW_END .
+
+    $default  reduce using rule 36 (body)
+
+
+State 106
+
+   40 statement_list: statement_list ';' . statement
+
+    IDENT      shift, and go to state 42
+    KW_RESULT  shift, and go to state 43
+    KW_RETURN  shift, and go to state 44
+    KW_IF      shift, and go to state 45
+    KW_FOR     shift, and go to state 46
+    KW_REPEAT  shift, and go to state 47
+    KW_WHILE   shift, and go to state 48
+
+    array_call          go to state 49
+    statement           go to state 141
+    store               go to state 53
+    proc_call           go to state 54
+    control_statements  go to state 55
+    if_statements       go to state 56
+    for_statements      go to state 57
+    while_statements    go to state 58
+
+
+State 107
+
+   31 pointer: KW_ARRAY KW_OF .
+
+    $default  reduce using rule 31 (pointer)
+
+
+State 108
+
+   30 array: KW_ARRAY dimensions . KW_OF
+   33 dimensions: dimensions . dimension
+
+    KW_OF  shift, and go to state 142
+    '['    shift, and go to state 83
+
+    dimension  go to state 122
+
+
+State 109
+
+   48 definition: IDENT TK_EQUAL array simple_var_type .
+
+    $default  reduce using rule 48 (definition)
+
+
+State 110
+
+   49 definition: IDENT TK_EQUAL pointer simple_var_type .
+
+    $default  reduce using rule 49 (definition)
+
+
+State 111
+
+   12 function_declaration: KW_FUNC IDENT '(' routine_args ')' . ':' array simple_var_type ';' optional_prologue function_body ';'
+   13                     | KW_FUNC IDENT '(' routine_args ')' . ':' pointer simple_var_type ';' optional_prologue function_body ';'
+   14                     | KW_FUNC IDENT '(' routine_args ')' . ':' simple_var_type ';' optional_prologue function_body ';'
+
+    ':'  shift, and go to state 143
+
+
+State 112
+
+   18 argument_list: argument_list ';' . func_arg
+
+    IDENT  shift, and go to state 23
+
+    func_arg     go to state 144
+    identifiers  go to state 74
+
+
+State 113
+
+   19 func_arg: identifiers ':' . array simple_var_type
+   20         | identifiers ':' . pointer simple_var_type
+   21         | identifiers ':' . simple_var_type
+
+    KW_ARRAY    shift, and go to state 62
+    KW_BOOLEAN  shift, and go to state 63
+    KW_REAL     shift, and go to state 64
+    KW_CHAR     shift, and go to state 65
+    KW_INTEGER  shift, and go to state 66
+
+    array            go to state 145
+    pointer          go to state 146
+    simple_var_type  go to state 147
+
+
+State 114
+
+   11 proceedure_declaration: KW_PROC IDENT '(' routine_args ')' . ';' optional_prologue body ';'
+
+    ';'  shift, and go to state 148
+
+
+State 115
+
+   25 variable: identifiers ':' array simple_var_type .
+
+    $default  reduce using rule 25 (variable)
+
+
+State 116
+
+   26 variable: identifiers ':' pointer simple_var_type .
+
+    $default  reduce using rule 26 (variable)
+
+
+State 117
+
+   51 store: IDENT STORE expression .
+   72 expression: expression . TK_MULTIPLY expression
+   73           | expression . KW_DIV expression
+   74           | expression . TK_SIGN expression
+   75           | expression . KW_MOD expression
+   76           | expression . TK_EQUAL expression
+   77           | expression . RELATIONAL expression
+   78           | expression . KW_AND expression
+   79           | expression . KW_OR expression
+
+    RELATIONAL   shift, and go to state 127
+    KW_AND       shift, and go to state 128
+    KW_DIV       shift, and go to state 129
+    KW_MOD       shift, and go to state 130
+    KW_OR        shift, and go to state 131
+    TK_EQUAL     shift, and go to state 132
+    TK_MULTIPLY  shift, and go to state 133
+    TK_SIGN      shift, and go to state 134
+
+    $default  reduce using rule 51 (store)
+
+
+State 118
+
+   54 proc_call: IDENT '(' arguments . ')'
+
+    ')'  shift, and go to state 149
+
+
+State 119
+
+   56 arguments: arglist .
+   58 arglist: arglist . ',' expression
+
+    ','  shift, and go to state 150
+
+    $default  reduce using rule 56 (arguments)
+
+
+State 120
+
+   57 arglist: expression .
+   72 expression: expression . TK_MULTIPLY expression
+   73           | expression . KW_DIV expression
+   74           | expression . TK_SIGN expression
+   75           | expression . KW_MOD expression
+   76           | expression . TK_EQUAL expression
+   77           | expression . RELATIONAL expression
+   78           | expression . KW_AND expression
+   79           | expression . KW_OR expression
+
+    RELATIONAL   shift, and go to state 127
+    KW_AND       shift, and go to state 128
+    KW_DIV       shift, and go to state 129
+    KW_MOD       shift, and go to state 130
+    KW_OR        shift, and go to state 131
+    TK_EQUAL     shift, and go to state 132
+    TK_MULTIPLY  shift, and go to state 133
+    TK_SIGN      shift, and go to state 134
+
+    $default  reduce using rule 57 (arglist)
+
+
+State 121
+
+   59 dimension: '[' POSINT . ']'
+
+    ']'  shift, and go to state 151
+
+
+State 122
+
+   33 dimensions: dimensions dimension .
+
+    $default  reduce using rule 33 (dimensions)
+
+
+State 123
+
+   52 store: KW_RESULT STORE expression .
+   72 expression: expression . TK_MULTIPLY expression
+   73           | expression . KW_DIV expression
+   74           | expression . TK_SIGN expression
+   75           | expression . KW_MOD expression
+   76           | expression . TK_EQUAL expression
+   77           | expression . RELATIONAL expression
+   78           | expression . KW_AND expression
+   79           | expression . KW_OR expression
+
+    RELATIONAL   shift, and go to state 127
+    KW_AND       shift, and go to state 128
+    KW_DIV       shift, and go to state 129
+    KW_MOD       shift, and go to state 130
+    KW_OR        shift, and go to state 131
+    TK_EQUAL     shift, and go to state 132
+    TK_MULTIPLY  shift, and go to state 133
+    TK_SIGN      shift, and go to state 134
+
+    $default  reduce using rule 52 (store)
+
+
+State 124
+
+   84 single_argument: KW_NOT IDENT .
+
+    $default  reduce using rule 84 (single_argument)
+
+
+State 125
+
+   85 single_argument: TK_SIGN IDENT .
+
+    $default  reduce using rule 85 (single_argument)
+
+
+State 126
+
+   72 expression: expression . TK_MULTIPLY expression
+   73           | expression . KW_DIV expression
+   74           | expression . TK_SIGN expression
+   75           | expression . KW_MOD expression
+   76           | expression . TK_EQUAL expression
+   77           | expression . RELATIONAL expression
+   78           | expression . KW_AND expression
+   79           | expression . KW_OR expression
+   80           | '(' expression . ')'
+
+    RELATIONAL   shift, and go to state 127
+    KW_AND       shift, and go to state 128
+    KW_DIV       shift, and go to state 129
+    KW_MOD       shift, and go to state 130
+    KW_OR        shift, and go to state 131
+    TK_EQUAL     shift, and go to state 132
+    TK_MULTIPLY  shift, and go to state 133
+    TK_SIGN      shift, and go to state 134
+    ')'          shift, and go to state 152
+
+
+State 127
+
+   77 expression: expression RELATIONAL . expression
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    expression       go to state 153
+    single_argument  go to state 99
+
+
+State 128
+
+   78 expression: expression KW_AND . expression
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    expression       go to state 154
+    single_argument  go to state 99
+
+
+State 129
+
+   73 expression: expression KW_DIV . expression
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    expression       go to state 155
+    single_argument  go to state 99
+
+
+State 130
+
+   75 expression: expression KW_MOD . expression
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    expression       go to state 156
+    single_argument  go to state 99
+
+
+State 131
+
+   79 expression: expression KW_OR . expression
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    expression       go to state 157
+    single_argument  go to state 99
+
+
+State 132
+
+   76 expression: expression TK_EQUAL . expression
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    expression       go to state 158
+    single_argument  go to state 99
+
+
+State 133
+
+   72 expression: expression TK_MULTIPLY . expression
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    expression       go to state 159
+    single_argument  go to state 99
+
+
+State 134
+
+   74 expression: expression TK_SIGN . expression
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    expression       go to state 160
+    single_argument  go to state 99
+
+
+State 135
+
+   64 if_statements: KW_IF expression KW_THEN . control_body
+   65              | KW_IF expression KW_THEN . control_body KW_ELSE control_body
+
+    KW_BEGIN  shift, and go to state 101
+
+    control_body  go to state 161
+
+
+State 136
+
+   66 for_statements: KW_FOR IDENT STORE . expression KW_TO expression KW_DO control_body
+   67               | KW_FOR IDENT STORE . expression KW_DOWNTO expression KW_DO control_body
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    expression       go to state 162
+    single_argument  go to state 99
+
+
+State 137
+
+   70 control_body: KW_BEGIN statements . KW_END
+
+    KW_END  shift, and go to state 163
+
+
+State 138
+
+   69 while_statements: KW_REPEAT control_body KW_UNTIL . expression
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    expression       go to state 164
+    single_argument  go to state 99
+
+
+State 139
+
+   68 while_statements: KW_WHILE expression KW_DO . control_body
+
+    KW_BEGIN  shift, and go to state 101
+
+    control_body  go to state 165
+
+
+State 140
+
+   53 store: array_call STORE expression .
+   72 expression: expression . TK_MULTIPLY expression
+   73           | expression . KW_DIV expression
+   74           | expression . TK_SIGN expression
+   75           | expression . KW_MOD expression
+   76           | expression . TK_EQUAL expression
+   77           | expression . RELATIONAL expression
+   78           | expression . KW_AND expression
+   79           | expression . KW_OR expression
+
+    RELATIONAL   shift, and go to state 127
+    KW_AND       shift, and go to state 128
+    KW_DIV       shift, and go to state 129
+    KW_MOD       shift, and go to state 130
+    KW_OR        shift, and go to state 131
+    TK_EQUAL     shift, and go to state 132
+    TK_MULTIPLY  shift, and go to state 133
+    TK_SIGN      shift, and go to state 134
+
+    $default  reduce using rule 53 (store)
+
+
+State 141
+
+   40 statement_list: statement_list ';' statement .
+
+    $default  reduce using rule 40 (statement_list)
+
+
+State 142
+
+   30 array: KW_ARRAY dimensions KW_OF .
+
+    $default  reduce using rule 30 (array)
+
+
+State 143
+
+   12 function_declaration: KW_FUNC IDENT '(' routine_args ')' ':' . array simple_var_type ';' optional_prologue function_body ';'
+   13                     | KW_FUNC IDENT '(' routine_args ')' ':' . pointer simple_var_type ';' optional_prologue function_body ';'
+   14                     | KW_FUNC IDENT '(' routine_args ')' ':' . simple_var_type ';' optional_prologue function_body ';'
+
+    KW_ARRAY    shift, and go to state 62
+    KW_BOOLEAN  shift, and go to state 63
+    KW_REAL     shift, and go to state 64
+    KW_CHAR     shift, and go to state 65
+    KW_INTEGER  shift, and go to state 66
+
+    array            go to state 166
+    pointer          go to state 167
+    simple_var_type  go to state 168
+
+
+State 144
+
+   18 argument_list: argument_list ';' func_arg .
+
+    $default  reduce using rule 18 (argument_list)
+
+
+State 145
+
+   19 func_arg: identifiers ':' array . simple_var_type
+
+    KW_BOOLEAN  shift, and go to state 63
+    KW_REAL     shift, and go to state 64
+    KW_CHAR     shift, and go to state 65
+    KW_INTEGER  shift, and go to state 66
+
+    simple_var_type  go to state 169
+
+
+State 146
+
+   20 func_arg: identifiers ':' pointer . simple_var_type
+
+    KW_BOOLEAN  shift, and go to state 63
+    KW_REAL     shift, and go to state 64
+    KW_CHAR     shift, and go to state 65
+    KW_INTEGER  shift, and go to state 66
+
+    simple_var_type  go to state 170
+
+
+State 147
+
+   21 func_arg: identifiers ':' simple_var_type .
+
+    $default  reduce using rule 21 (func_arg)
+
+
+State 148
+
+   11 proceedure_declaration: KW_PROC IDENT '(' routine_args ')' ';' . optional_prologue body ';'
+
+    KW_TYPE  shift, and go to state 6
+    KW_FUNC  shift, and go to state 7
+    KW_PROC  shift, and go to state 8
+    KW_VAR   shift, and go to state 9
+
+    $default  reduce using rule 2 (optional_prologue)
+
+    optional_prologue        go to state 171
+    proceedure_declarations  go to state 11
+    function_declarations    go to state 12
+    proceedure_declaration   go to state 13
+    function_declaration     go to state 14
+    variable_declarations    go to state 15
+    typedefs                 go to state 16
+
+
+State 149
+
+   54 proc_call: IDENT '(' arguments ')' .
+
+    $default  reduce using rule 54 (proc_call)
+
+
+State 150
+
+   58 arglist: arglist ',' . expression
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    expression       go to state 172
+    single_argument  go to state 99
+
+
+State 151
+
+   59 dimension: '[' POSINT ']' .
+
+    $default  reduce using rule 59 (dimension)
+
+
+State 152
+
+   80 expression: '(' expression ')' .
+
+    $default  reduce using rule 80 (expression)
+
+
+State 153
+
+   72 expression: expression . TK_MULTIPLY expression
+   73           | expression . KW_DIV expression
+   74           | expression . TK_SIGN expression
+   75           | expression . KW_MOD expression
+   76           | expression . TK_EQUAL expression
+   77           | expression . RELATIONAL expression
+   77           | expression RELATIONAL expression .
+   78           | expression . KW_AND expression
+   79           | expression . KW_OR expression
+
+    KW_AND       shift, and go to state 128
+    KW_DIV       shift, and go to state 129
+    KW_MOD       shift, and go to state 130
+    KW_OR        shift, and go to state 131
+    TK_EQUAL     shift, and go to state 132
+    TK_MULTIPLY  shift, and go to state 133
+    TK_SIGN      shift, and go to state 134
+
+    $default  reduce using rule 77 (expression)
+
+
+State 154
+
+   72 expression: expression . TK_MULTIPLY expression
+   73           | expression . KW_DIV expression
+   74           | expression . TK_SIGN expression
+   75           | expression . KW_MOD expression
+   76           | expression . TK_EQUAL expression
+   77           | expression . RELATIONAL expression
+   78           | expression . KW_AND expression
+   78           | expression KW_AND expression .
+   79           | expression . KW_OR expression
+
+    KW_DIV       shift, and go to state 129
+    KW_MOD       shift, and go to state 130
+    KW_OR        shift, and go to state 131
+    TK_EQUAL     shift, and go to state 132
+    TK_MULTIPLY  shift, and go to state 133
+    TK_SIGN      shift, and go to state 134
+
+    $default  reduce using rule 78 (expression)
+
+
+State 155
+
+   72 expression: expression . TK_MULTIPLY expression
+   73           | expression . KW_DIV expression
+   73           | expression KW_DIV expression .
+   74           | expression . TK_SIGN expression
+   75           | expression . KW_MOD expression
+   76           | expression . TK_EQUAL expression
+   77           | expression . RELATIONAL expression
+   78           | expression . KW_AND expression
+   79           | expression . KW_OR expression
+
+    KW_MOD       shift, and go to state 130
+    KW_OR        shift, and go to state 131
+    TK_EQUAL     shift, and go to state 132
+    TK_MULTIPLY  shift, and go to state 133
+    TK_SIGN      shift, and go to state 134
+
+    $default  reduce using rule 73 (expression)
+
+
+State 156
+
+   72 expression: expression . TK_MULTIPLY expression
+   73           | expression . KW_DIV expression
+   74           | expression . TK_SIGN expression
+   75           | expression . KW_MOD expression
+   75           | expression KW_MOD expression .
+   76           | expression . TK_EQUAL expression
+   77           | expression . RELATIONAL expression
+   78           | expression . KW_AND expression
+   79           | expression . KW_OR expression
+
+    KW_OR        shift, and go to state 131
+    TK_EQUAL     shift, and go to state 132
+    TK_MULTIPLY  shift, and go to state 133
+    TK_SIGN      shift, and go to state 134
+
+    $default  reduce using rule 75 (expression)
+
+
+State 157
+
+   72 expression: expression . TK_MULTIPLY expression
+   73           | expression . KW_DIV expression
+   74           | expression . TK_SIGN expression
+   75           | expression . KW_MOD expression
+   76           | expression . TK_EQUAL expression
+   77           | expression . RELATIONAL expression
+   78           | expression . KW_AND expression
+   79           | expression . KW_OR expression
+   79           | expression KW_OR expression .
+
+    TK_EQUAL     shift, and go to state 132
+    TK_MULTIPLY  shift, and go to state 133
+    TK_SIGN      shift, and go to state 134
+
+    $default  reduce using rule 79 (expression)
+
+
+State 158
+
+   72 expression: expression . TK_MULTIPLY expression
+   73           | expression . KW_DIV expression
+   74           | expression . TK_SIGN expression
+   75           | expression . KW_MOD expression
+   76           | expression . TK_EQUAL expression
+   76           | expression TK_EQUAL expression .
+   77           | expression . RELATIONAL expression
+   78           | expression . KW_AND expression
+   79           | expression . KW_OR expression
+
+    TK_MULTIPLY  shift, and go to state 133
+    TK_SIGN      shift, and go to state 134
+
+    $default  reduce using rule 76 (expression)
+
+
+State 159
+
+   72 expression: expression . TK_MULTIPLY expression
+   72           | expression TK_MULTIPLY expression .
+   73           | expression . KW_DIV expression
+   74           | expression . TK_SIGN expression
+   75           | expression . KW_MOD expression
+   76           | expression . TK_EQUAL expression
+   77           | expression . RELATIONAL expression
+   78           | expression . KW_AND expression
+   79           | expression . KW_OR expression
+
+    TK_SIGN  shift, and go to state 134
+
+    $default  reduce using rule 72 (expression)
+
+
+State 160
+
+   72 expression: expression . TK_MULTIPLY expression
+   73           | expression . KW_DIV expression
+   74           | expression . TK_SIGN expression
+   74           | expression TK_SIGN expression .
+   75           | expression . KW_MOD expression
+   76           | expression . TK_EQUAL expression
+   77           | expression . RELATIONAL expression
+   78           | expression . KW_AND expression
+   79           | expression . KW_OR expression
+
+    TK_SIGN  shift, and go to state 134
+
+    $default  reduce using rule 74 (expression)
+
+
+State 161
+
+   64 if_statements: KW_IF expression KW_THEN control_body .
+   65              | KW_IF expression KW_THEN control_body . KW_ELSE control_body
+
+    KW_ELSE  shift, and go to state 173
+
+    $default  reduce using rule 64 (if_statements)
+
+
+State 162
+
+   66 for_statements: KW_FOR IDENT STORE expression . KW_TO expression KW_DO control_body
+   67               | KW_FOR IDENT STORE expression . KW_DOWNTO expression KW_DO control_body
+   72 expression: expression . TK_MULTIPLY expression
+   73           | expression . KW_DIV expression
+   74           | expression . TK_SIGN expression
+   75           | expression . KW_MOD expression
+   76           | expression . TK_EQUAL expression
+   77           | expression . RELATIONAL expression
+   78           | expression . KW_AND expression
+   79           | expression . KW_OR expression
+
+    RELATIONAL   shift, and go to state 127
+    KW_AND       shift, and go to state 128
+    KW_DIV       shift, and go to state 129
+    KW_MOD       shift, and go to state 130
+    KW_OR        shift, and go to state 131
+    TK_EQUAL     shift, and go to state 132
+    TK_MULTIPLY  shift, and go to state 133
+    TK_SIGN      shift, and go to state 134
+    KW_TO        shift, and go to state 174
+    KW_DOWNTO    shift, and go to state 175
+
+
+State 163
+
+   70 control_body: KW_BEGIN statements KW_END .
+
+    $default  reduce using rule 70 (control_body)
+
+
+State 164
+
+   69 while_statements: KW_REPEAT control_body KW_UNTIL expression .
+   72 expression: expression . TK_MULTIPLY expression
+   73           | expression . KW_DIV expression
+   74           | expression . TK_SIGN expression
+   75           | expression . KW_MOD expression
+   76           | expression . TK_EQUAL expression
+   77           | expression . RELATIONAL expression
+   78           | expression . KW_AND expression
+   79           | expression . KW_OR expression
+
+    RELATIONAL   shift, and go to state 127
+    KW_AND       shift, and go to state 128
+    KW_DIV       shift, and go to state 129
+    KW_MOD       shift, and go to state 130
+    KW_OR        shift, and go to state 131
+    TK_EQUAL     shift, and go to state 132
+    TK_MULTIPLY  shift, and go to state 133
+    TK_SIGN      shift, and go to state 134
+
+    $default  reduce using rule 69 (while_statements)
+
+
+State 165
+
+   68 while_statements: KW_WHILE expression KW_DO control_body .
+
+    $default  reduce using rule 68 (while_statements)
+
+
+State 166
+
+   12 function_declaration: KW_FUNC IDENT '(' routine_args ')' ':' array . simple_var_type ';' optional_prologue function_body ';'
+
+    KW_BOOLEAN  shift, and go to state 63
+    KW_REAL     shift, and go to state 64
+    KW_CHAR     shift, and go to state 65
+    KW_INTEGER  shift, and go to state 66
+
+    simple_var_type  go to state 176
+
+
+State 167
+
+   13 function_declaration: KW_FUNC IDENT '(' routine_args ')' ':' pointer . simple_var_type ';' optional_prologue function_body ';'
+
+    KW_BOOLEAN  shift, and go to state 63
+    KW_REAL     shift, and go to state 64
+    KW_CHAR     shift, and go to state 65
+    KW_INTEGER  shift, and go to state 66
+
+    simple_var_type  go to state 177
+
+
+State 168
+
+   14 function_declaration: KW_FUNC IDENT '(' routine_args ')' ':' simple_var_type . ';' optional_prologue function_body ';'
+
+    ';'  shift, and go to state 178
+
+
+State 169
+
+   19 func_arg: identifiers ':' array simple_var_type .
+
+    $default  reduce using rule 19 (func_arg)
+
+
+State 170
+
+   20 func_arg: identifiers ':' pointer simple_var_type .
+
+    $default  reduce using rule 20 (func_arg)
+
+
+State 171
+
+   11 proceedure_declaration: KW_PROC IDENT '(' routine_args ')' ';' optional_prologue . body ';'
+
+    KW_BEGIN  shift, and go to state 27
+
+    body  go to state 179
+
+
+State 172
+
+   58 arglist: arglist ',' expression .
+   72 expression: expression . TK_MULTIPLY expression
+   73           | expression . KW_DIV expression
+   74           | expression . TK_SIGN expression
+   75           | expression . KW_MOD expression
+   76           | expression . TK_EQUAL expression
+   77           | expression . RELATIONAL expression
+   78           | expression . KW_AND expression
+   79           | expression . KW_OR expression
+
+    RELATIONAL   shift, and go to state 127
+    KW_AND       shift, and go to state 128
+    KW_DIV       shift, and go to state 129
+    KW_MOD       shift, and go to state 130
+    KW_OR        shift, and go to state 131
+    TK_EQUAL     shift, and go to state 132
+    TK_MULTIPLY  shift, and go to state 133
+    TK_SIGN      shift, and go to state 134
+
+    $default  reduce using rule 58 (arglist)
+
+
+State 173
+
+   65 if_statements: KW_IF expression KW_THEN control_body KW_ELSE . control_body
+
+    KW_BEGIN  shift, and go to state 101
+
+    control_body  go to state 180
+
+
+State 174
+
+   66 for_statements: KW_FOR IDENT STORE expression KW_TO . expression KW_DO control_body
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    expression       go to state 181
+    single_argument  go to state 99
+
+
+State 175
+
+   67 for_statements: KW_FOR IDENT STORE expression KW_DOWNTO . expression KW_DO control_body
+
+    IDENT      shift, and go to state 87
+    POSINT     shift, and go to state 88
+    REAL       shift, and go to state 89
+    STRING     shift, and go to state 90
+    BOOL       shift, and go to state 91
+    KW_NOT     shift, and go to state 92
+    TK_SIGN    shift, and go to state 93
+    KW_RESULT  shift, and go to state 94
+    '('        shift, and go to state 95
+
+    array_call       go to state 96
+    proc_call        go to state 97
+    expression       go to state 182
+    single_argument  go to state 99
+
+
+State 176
+
+   12 function_declaration: KW_FUNC IDENT '(' routine_args ')' ':' array simple_var_type . ';' optional_prologue function_body ';'
+
+    ';'  shift, and go to state 183
+
+
+State 177
+
+   13 function_declaration: KW_FUNC IDENT '(' routine_args ')' ':' pointer simple_var_type . ';' optional_prologue function_body ';'
+
+    ';'  shift, and go to state 184
+
+
+State 178
+
+   14 function_declaration: KW_FUNC IDENT '(' routine_args ')' ':' simple_var_type ';' . optional_prologue function_body ';'
+
+    KW_TYPE  shift, and go to state 6
+    KW_FUNC  shift, and go to state 7
+    KW_PROC  shift, and go to state 8
+    KW_VAR   shift, and go to state 9
+
+    $default  reduce using rule 2 (optional_prologue)
+
+    optional_prologue        go to state 185
+    proceedure_declarations  go to state 11
+    function_declarations    go to state 12
+    proceedure_declaration   go to state 13
+    function_declaration     go to state 14
+    variable_declarations    go to state 15
+    typedefs                 go to state 16
+
+
+State 179
+
+   11 proceedure_declaration: KW_PROC IDENT '(' routine_args ')' ';' optional_prologue body . ';'
+
+    ';'  shift, and go to state 186
+
+
+State 180
+
+   65 if_statements: KW_IF expression KW_THEN control_body KW_ELSE control_body .
+
+    $default  reduce using rule 65 (if_statements)
+
+
+State 181
+
+   66 for_statements: KW_FOR IDENT STORE expression KW_TO expression . KW_DO control_body
+   72 expression: expression . TK_MULTIPLY expression
+   73           | expression . KW_DIV expression
+   74           | expression . TK_SIGN expression
+   75           | expression . KW_MOD expression
+   76           | expression . TK_EQUAL expression
+   77           | expression . RELATIONAL expression
+   78           | expression . KW_AND expression
+   79           | expression . KW_OR expression
+
+    RELATIONAL   shift, and go to state 127
+    KW_AND       shift, and go to state 128
+    KW_DIV       shift, and go to state 129
+    KW_MOD       shift, and go to state 130
+    KW_OR        shift, and go to state 131
+    TK_EQUAL     shift, and go to state 132
+    TK_MULTIPLY  shift, and go to state 133
+    TK_SIGN      shift, and go to state 134
+    KW_DO        shift, and go to state 187
+
+
+State 182
+
+   67 for_statements: KW_FOR IDENT STORE expression KW_DOWNTO expression . KW_DO control_body
+   72 expression: expression . TK_MULTIPLY expression
+   73           | expression . KW_DIV expression
+   74           | expression . TK_SIGN expression
+   75           | expression . KW_MOD expression
+   76           | expression . TK_EQUAL expression
+   77           | expression . RELATIONAL expression
+   78           | expression . KW_AND expression
+   79           | expression . KW_OR expression
+
+    RELATIONAL   shift, and go to state 127
+    KW_AND       shift, and go to state 128
+    KW_DIV       shift, and go to state 129
+    KW_MOD       shift, and go to state 130
+    KW_OR        shift, and go to state 131
+    TK_EQUAL     shift, and go to state 132
+    TK_MULTIPLY  shift, and go to state 133
+    TK_SIGN      shift, and go to state 134
+    KW_DO        shift, and go to state 188
+
+
+State 183
+
+   12 function_declaration: KW_FUNC IDENT '(' routine_args ')' ':' array simple_var_type ';' . optional_prologue function_body ';'
+
+    KW_TYPE  shift, and go to state 6
+    KW_FUNC  shift, and go to state 7
+    KW_PROC  shift, and go to state 8
+    KW_VAR   shift, and go to state 9
+
+    $default  reduce using rule 2 (optional_prologue)
+
+    optional_prologue        go to state 189
+    proceedure_declarations  go to state 11
+    function_declarations    go to state 12
+    proceedure_declaration   go to state 13
+    function_declaration     go to state 14
+    variable_declarations    go to state 15
+    typedefs                 go to state 16
+
+
+State 184
+
+   13 function_declaration: KW_FUNC IDENT '(' routine_args ')' ':' pointer simple_var_type ';' . optional_prologue function_body ';'
+
+    KW_TYPE  shift, and go to state 6
+    KW_FUNC  shift, and go to state 7
+    KW_PROC  shift, and go to state 8
+    KW_VAR   shift, and go to state 9
+
+    $default  reduce using rule 2 (optional_prologue)
+
+    optional_prologue        go to state 190
+    proceedure_declarations  go to state 11
+    function_declarations    go to state 12
+    proceedure_declaration   go to state 13
+    function_declaration     go to state 14
+    variable_declarations    go to state 15
+    typedefs                 go to state 16
+
+
+State 185
+
+   14 function_declaration: KW_FUNC IDENT '(' routine_args ')' ':' simple_var_type ';' optional_prologue . function_body ';'
+
+    KW_BEGIN  shift, and go to state 191
+
+    function_body  go to state 192
+
+
+State 186
+
+   11 proceedure_declaration: KW_PROC IDENT '(' routine_args ')' ';' optional_prologue body ';' .
+
+    $default  reduce using rule 11 (proceedure_declaration)
+
+
+State 187
+
+   66 for_statements: KW_FOR IDENT STORE expression KW_TO expression KW_DO . control_body
+
+    KW_BEGIN  shift, and go to state 101
+
+    control_body  go to state 193
+
+
+State 188
+
+   67 for_statements: KW_FOR IDENT STORE expression KW_DOWNTO expression KW_DO . control_body
+
+    KW_BEGIN  shift, and go to state 101
+
+    control_body  go to state 194
+
+
+State 189
+
+   12 function_declaration: KW_FUNC IDENT '(' routine_args ')' ':' array simple_var_type ';' optional_prologue . function_body ';'
+
+    KW_BEGIN  shift, and go to state 191
+
+    function_body  go to state 195
+
+
+State 190
+
+   13 function_declaration: KW_FUNC IDENT '(' routine_args ')' ':' pointer simple_var_type ';' optional_prologue . function_body ';'
+
+    KW_BEGIN  shift, and go to state 191
+
+    function_body  go to state 196
+
+
+State 191
+
+   35 function_body: KW_BEGIN . statements KW_END
+
+    IDENT      shift, and go to state 42
+    KW_RESULT  shift, and go to state 43
+    KW_RETURN  shift, and go to state 44
+    KW_IF      shift, and go to state 45
+    KW_FOR     shift, and go to state 46
+    KW_REPEAT  shift, and go to state 47
+    KW_WHILE   shift, and go to state 48
+
+    $default  reduce using rule 37 (statements)
+
+    array_call          go to state 49
+    statements          go to state 197
+    statement_list      go to state 51
+    statement           go to state 52
+    store               go to state 53
+    proc_call           go to state 54
+    control_statements  go to state 55
+    if_statements       go to state 56
+    for_statements      go to state 57
+    while_statements    go to state 58
+
+
+State 192
+
+   14 function_declaration: KW_FUNC IDENT '(' routine_args ')' ':' simple_var_type ';' optional_prologue function_body . ';'
+
+    ';'  shift, and go to state 198
+
+
+State 193
+
+   66 for_statements: KW_FOR IDENT STORE expression KW_TO expression KW_DO control_body .
+
+    $default  reduce using rule 66 (for_statements)
+
+
+State 194
+
+   67 for_statements: KW_FOR IDENT STORE expression KW_DOWNTO expression KW_DO control_body .
+
+    $default  reduce using rule 67 (for_statements)
+
+
+State 195
+
+   12 function_declaration: KW_FUNC IDENT '(' routine_args ')' ':' array simple_var_type ';' optional_prologue function_body . ';'
+
+    ';'  shift, and go to state 199
+
+
+State 196
+
+   13 function_declaration: KW_FUNC IDENT '(' routine_args ')' ':' pointer simple_var_type ';' optional_prologue function_body . ';'
+
+    ';'  shift, and go to state 200
+
+
+State 197
+
+   35 function_body: KW_BEGIN statements . KW_END
+
+    KW_END  shift, and go to state 201
+
+
+State 198
+
+   14 function_declaration: KW_FUNC IDENT '(' routine_args ')' ':' simple_var_type ';' optional_prologue function_body ';' .
+
+    $default  reduce using rule 14 (function_declaration)
+
+
+State 199
+
+   12 function_declaration: KW_FUNC IDENT '(' routine_args ')' ':' array simple_var_type ';' optional_prologue function_body ';' .
+
+    $default  reduce using rule 12 (function_declaration)
+
+
+State 200
+
+   13 function_declaration: KW_FUNC IDENT '(' routine_args ')' ':' pointer simple_var_type ';' optional_prologue function_body ';' .
+
+    $default  reduce using rule 13 (function_declaration)
+
+
+State 201
+
+   35 function_body: KW_BEGIN statements KW_END .
+
+    $default  reduce using rule 35 (function_body)
